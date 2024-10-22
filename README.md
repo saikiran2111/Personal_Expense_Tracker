@@ -30,8 +30,7 @@ A RESTful API for managing personal financial records. Users can track their inc
 
 1. Clone the repository
 ```bash
-git clone <repository-url>
-cd personal-finance-tracker
+git clone https://github.com/saikiran2111/Personal_Expense_Tracker.git
 ```
 
 2. Install dependencies
@@ -287,6 +286,79 @@ Error responses follow this format:
 }
 ```
 
+# API Validation Documentation
+
+## 1. User Registration Validation
+- **Endpoint:** `/register`
+- **Fields:**
+  - `username` (required)
+  - `password` (required)
+- **Validation:**
+  - Both `username` and `password` must be provided. 
+  - If either field is missing, a `400 Bad Request` error is returned.
+
+## 2. User Login Validation
+- **Endpoint:** `/login`
+- **Fields:**
+  - `username` (required)
+  - `password` (required)
+- **Validation:**
+  - Both `username` and `password` must be provided. 
+  - If either field is missing, a `400 Bad Request` error is returned.
+  - If the `username` does not exist or `password` does not match, a `401 Unauthorized` error is returned.
+
+## 3. Transaction Data Validation
+- **Endpoint:** `/transactions` and `/transactions/:id (PUT)`
+- **Schema (using Joi):**
+  - `type` (required): Must be either `income` or `expense`.
+  - `category` (required): Must be a string.
+  - `amount` (required): Must be a positive number.
+  - `date` (required): Must be a valid ISO 8601 date string.
+  - `description` (optional): Can be a string.
+- **Validation:**
+  - If the transaction data does not match the schema, a `400 Bad Request` error is returned.
+
+## 4. Batch Transactions Validation
+- **Endpoint:** `/transactions/batch`
+- **Fields:**
+  - An array of transactions, where each transaction contains:
+    - `type` (required): Must be either `income` or `expense`.
+    - `category` (required): Must be a string.
+    - `amount` (required): Must be a positive number.
+    - `date` (required): Must be a valid ISO 8601 date string.
+    - `description` (optional): Can be a string.
+- **Validation:**
+  - An array of transactions is required.
+  - If the array is not provided or is empty, a `400 Bad Request` error is returned.
+
+## 5. JWT Token Validation
+- **Middleware:** `authenticateJWT`
+- **Validation:**
+  - The JWT token must be provided in the `Authorization` header for protected routes.
+  - If the token is missing or invalid, a `403 Forbidden` error is returned.
+
+## 6. Pagination and Filtering Validation
+- **Endpoint:** `/transactions`
+- **Query Parameters:**
+  - `page`: Must be a positive integer. Defaults to 1.
+  - `limit`: Must be a positive integer. Defaults to 10.
+  - `type`, `category`, `startDate`, `endDate`: Optional filters.
+- **Validation:**
+  - If the parameters are invalid, appropriate errors are returned, or default values are used.
+
+## 7. Transaction Update Validation
+- **Endpoint:** `/transactions/:id (PUT)`
+- **Schema (using Joi):**
+  - Same schema as described in Transaction Data Validation.
+- **Validation:**
+  - If the transaction data does not match the schema, a `400 Bad Request` error is returned.
+
+## 8. Transaction ID Validation
+- **Endpoints:** `/transactions/:id`, `/transactions/:id (PUT)`, `/transactions/:id (DELETE)`
+- **Validation:**
+  - If the transaction with the provided `id` does not exist, a `404 Not Found` error is returned.
+
+
 ## Security Considerations
 
 1. All endpoints (except registration and login) require JWT authentication
@@ -294,14 +366,4 @@ Error responses follow this format:
 3. Input validation is performed using Joi schema validation
 4. SQL injection protection is implemented using parameterized queries
 
-## Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details
