@@ -1,6 +1,10 @@
-# Personal Finance Tracker API
+# Personal Expense Tracker API
 
-A RESTful API for managing personal financial records. Users can track their income and expenses, retrieve transaction history, and view financial summaries.
+This is the API documentation for the Personal Expense Tracker application deployed on Render.
+
+## Base URL
+The application is deployed and accessible at the following URL:
+https://personal-expense-tracker-3bmy.onrender.com
 
 ## Table of Contents
 - [Technologies Used](#technologies-used)
